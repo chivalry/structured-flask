@@ -6,7 +6,7 @@ from flask_login import UserMixin
 from project.server import db, bcrypt
 
 
-class AbstractModel(UserMixin, db.Model):
+class AbstractModel(db.Model):
     __abstract__= True
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -15,7 +15,7 @@ class AbstractModel(UserMixin, db.Model):
         return '<{}: "{}">'.format(self.__class__.__name__, self.id)
 
 
-class User(AbstractModel):
+class User(UserMixin, AbstractModel):
     __tablename__ = 'users'
 
     email = db.Column(db.String(255), unique=True, nullable=False)

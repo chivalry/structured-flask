@@ -2,7 +2,8 @@ import subprocess
 
 from flask.cli import FlaskGroup
 
-from project.server import create_app
+from project.server import create_app, db
+from project.server.models import User
 
 __author__ = 'Charles Ross'
 __email__ = 'chivalry@mac.com'
@@ -11,6 +12,12 @@ __version__ = '0.0.1'
 
 app = create_app()
 cli = FlaskGroup(create_app=create_app)
+
+
+@cli.command()
+def create_data():
+    """Create sample data."""
+    pass
 
 
 @cli.command()
