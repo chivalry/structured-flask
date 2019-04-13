@@ -32,7 +32,7 @@ def create_app():
     bootstrap.init_app(app)
     db.init_app(app)
     bcrypt.init_app(app)
-    migrate.init_app(app)
+    migrate.init_app(app, db)
 
     # register blueprints
     from project.server.main.views import main_blueprint
