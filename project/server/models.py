@@ -1,21 +1,18 @@
 from datetime import datetime
 
 from flask import current_app
+from flask_login import UserMixin
 
 from project.server import db, bcrypt
 
 
-class AbstractModel(db.Model):
+class AbstractModel(UserMixin, db.Model):
     __abstract__= True
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
         return '<{}: "{}">'.format(self.__class__.__name__, self.id)
-
-    @classmethod
-    def select_by_id(cls, id):
-        return cls.query.filter_by(id=id).first()
 
 
 class User(AbstractModel):
@@ -34,15 +31,3 @@ class User(AbstractModel):
 
     def __repr__(self):
         return '<User {}>'.format(self.email)
-
-    def is_autneticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.id
