@@ -4,12 +4,14 @@ from flask import Flask
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 
 
 # instantiate the extensions
 toolbar = DebugToolbarExtension()
 bootstrap = Bootstrap()
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 
 def create_app():
@@ -28,6 +30,7 @@ def create_app():
     toolbar.init_app(app)
     bootstrap.init_app(app)
     db.init_app(app)
+    bcrypt.init_app(app)
 
     # register blueprints
     from project.server.main.views import main_blueprint

@@ -9,14 +9,15 @@ load_dotenv(os.path.join(basedir, '.env'))
 class Config(object):
     """Base configuration."""
 
+    ADMINS = ['chivalry@mac.com']
     APP_NAME = os.getenv('APP_NAME', 'Flask Skeleton')
-    SECRET_KEY = os.getenv('SECRET_KEY', 'not-secret')
+    BCRYPT_LOG_ROUNDS = 4
     DEBUG_TB_ENABLED = False
+    LANGUAGES = ['en']
+    SECRET_KEY = os.getenv('SECRET_KEY', 'not-secret')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     WTF_CSRF_ENABLED = False
-    ADMINS = ['chivalry@mac.com']
-    LANGUAGES = ['en']
 
 
 class DevConfig(Config):
@@ -36,4 +37,5 @@ class TestConfig(Config):
 class ProdConfig(Config):
     """Production configuration."""
 
+    BCRYPT_LOG_ROUNDS = 13
     WTF_CSRF_ENABLED = True
