@@ -7,6 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 # instantiate the extensions
 toolbar = DebugToolbarExtension()
 
+
 def create_app(script_info=None):
 
     # instantiate the app

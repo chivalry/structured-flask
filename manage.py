@@ -13,5 +13,6 @@ def flake():
     """Runs flake8 on the project."""
     subprocess.run(['flake8'])
 
+
 if __name__ == '__main__':
     cli()
