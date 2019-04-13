@@ -2,10 +2,12 @@ import os
 
 from flask import Flask
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_bootstrap import Bootstrap
 
 
 # instantiate the extensions
 toolbar = DebugToolbarExtension()
+bootstrap = Bootstrap()
 
 
 def create_app(script_info=None):
@@ -22,6 +24,7 @@ def create_app(script_info=None):
     app.config.from_object(app_settings)
 
     toolbar.init_app(app)
+    bootstrap.init_app(app)
 
     # register blueprints
     from project.server.main.views import main_blueprint
