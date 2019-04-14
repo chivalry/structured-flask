@@ -31,6 +31,7 @@ class TestTestingConfig(TestCase):
         self.assertTrue(app.config['BCRYPT_LOG_ROUNDS'] == 4)
         self.assertTrue(app.config['WTF_CSRF_ENABLED'] is False)
 
+
 class TestProductionConfig(TestCase):
     def create_app(self):
         app.config.from_object('project.server.config.ProdConfig')

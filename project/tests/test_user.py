@@ -68,5 +68,6 @@ class TestUserBlueprint(BaseTestCase):
             response = self.log_in(password='foobar')
             self.assertIn(const.LOGIN_FAILURE_MSG, str(response.data))
 
+
 if __name__ == '__main__':
     unittest.main()
