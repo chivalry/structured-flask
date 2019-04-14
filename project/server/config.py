@@ -13,6 +13,7 @@ class Config(object):
     APP_NAME = os.getenv('APP_NAME', 'Flask Skeleton')
     BCRYPT_LOG_ROUNDS = 4
     DEBUG_TB_ENABLED = False
+    DEBUG_TB_PROFILER_ENABLED = True
     LANGUAGES = ['en']
     SECRET_KEY = os.getenv('SECRET_KEY', 'not-secret')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -29,6 +30,7 @@ class DevConfig(Config):
 
 
 class TestConfig(Config):
+    """Testing configuration."""
     TESTING = True
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_TEST_URL', 'sqlite://')

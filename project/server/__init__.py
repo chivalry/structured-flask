@@ -8,6 +8,8 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_login import LoginManager
 
+import project.server.constants as const
+
 # instantiate the extensions
 toolbar = DebugToolbarExtension()
 bootstrap = Bootstrap()
@@ -18,6 +20,7 @@ login_manager = LoginManager()
 
 
 def create_app():
+    """Return a configured instance of Flask."""
 
     app = Flask(
             __name__,
@@ -43,6 +46,7 @@ def create_app():
     from project.server.models import User
 
     login_manager.login_view = 'user.login'
+    login_manager.login_message = const.LOGIN_DIRECTIVE_MSG
     login_manager.login_message_category = 'danger'
 
     @login_manager.user_loader

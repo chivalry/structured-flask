@@ -7,6 +7,7 @@ from project.server import db, bcrypt
 
 
 class AbstractModel(db.Model):
+    """An abstract model with basic items required bot all models."""
     __abstract__= True
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -16,6 +17,7 @@ class AbstractModel(db.Model):
 
 
 class User(UserMixin, AbstractModel):
+    """A simple user model that will support logging into the app."""
     __tablename__ = 'users'
 
     email = db.Column(db.String(255), unique=True, nullable=False)

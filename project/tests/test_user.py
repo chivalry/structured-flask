@@ -3,90 +3,70 @@ import unittest
 
 from flask_login import current_user
 
-from base import BaseTestCase
+from project.tests.base import BaseTestCase
 from project.server import bcrypt
 from project.server.models import User
 from project.server.user.forms import LoginForm
+import project.server.constants as const
 
 
 class TestUserBlueprint(BaseTestCase):
+    def log_in(self, email=None, password=None):
+        email = email or self.admin_email
+        password = password or self.admin_password
+        return self.client.post(
+                '/login',
+                data=dict(email=email, password=password),
+                follow_redirects=True
+        )
+
     def test_correct_login(self):
-        # Ensure login behaves correctly with correct credentials.
         with self.client:
-            response = self.client.post(
-                    '/login',
-                    data=dict(email='ad@min.com', password='admin_user'),
-                    follow_redirects=True
-            )
-            self.assertIn(b'Welcome', response.data)
+            response = self.log_in()
             self.assertIn(b'Logout', response.data)
-            self.assertTrue(current_user.email == 'ad@min.com')
+            self.assertTrue(current_user.email == self.admin_email)
             self.assertTrue(current_user.is_active)
             self.assertEqual(response.status_code, 200)
 
     def test_logout_behaves_correctly(self):
-        # Ensure logout behaves correctly - regarding the session.
         with self.client:
-            self.client.post(
-                    '/login',
-                    data=dict(email='ad@min.com', password='admin_user'),
-                    follow_redirects=True
-            )
+            self.log_in()
             response = self.client.get('/logout', follow_redirects=True)
-            self.assertIn(b'You were logged out. Bye!', response.data)
+            self.assertIn(const.LOGOUT_SUCCESS_MSG, str(response.data))
             self.assertFalse(current_user.is_active)
 
     def test_logout_route_requires_login(self):
-        # Ensure logout route requires logged in user.
         response = self.client.get('/logout', follow_redirects=True)
-        self.assertIn(b'Please log in to access this page', response.data)
+        self.assertIn(self.create_app().login_manager.login_message, str(response.data))
 
     def test_validate_success_login_form(self):
-        # Ensure correct data validates.
-        form = LoginForm(email='ad@min.com', password='admin_user')
+        form = LoginForm(email=self.admin_email, password=self.admin_password)
         self.assertTrue(form.validate())
 
     def test_validate_invalid_email_format(self):
-        # Ensure invalid email format throws error.
         form = LoginForm(email='unknown', password='example')
         self.assertFalse(form.validate())
 
     def test_get_by_id(self):
-        # Ensure id is correct for the currently logged in user.
         with self.client:
-            self.client.post(
-                    '/login',
-                    data=dict(email='ad@min.com', password='admin_user'),
-                    follow_redirects=True
-            )
+            self.log_in()
             self.assertTrue(current_user.id == 1)
 
     def test_registered_on_defaults_to_datetime(self):
-        # Ensure registered_on is a datetime
         with self.client:
-            self.client.post(
-                    '/login',
-                    data=dict(email='ad@min.com', password='admin_user'),
-                    follow_redirects=True
-            )
+            self.log_in()
             user = User.query.get(1)
             self.assertIsInstance(user.timestamp, datetime.datetime)
 
     def test_check_password(self):
-        # Ensure given password is correct after unhashing.
         user = User.query.get(1)
-        self.assertTrue(bcrypt.check_password_hash(user.password, 'admin_user'))
+        self.assertTrue(bcrypt.check_password_hash(user.password, self.admin_password))
         self.assertFalse(bcrypt.check_password_hash(user.password, 'foobar'))
 
     def test_validate_invalid_password(self):
-        # Ensure user can't login when the password is incorrect.
         with self.client:
-            response = self.client.post(
-                    '/login',
-                    data=dict(email='ad@min.com', password='foobar'),
-                    follow_redirects=True
-            )
-            self.assertIn(b'Invalid email or password', response.data)
+            response = self.log_in(password='foobar')
+            self.assertIn(const.LOGIN_FAILURE_MSG, str(response.data))
 
 if __name__ == '__main__':
     unittest.main()
