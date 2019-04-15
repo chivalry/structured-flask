@@ -18,6 +18,7 @@ flask-testing = "*"
 flask-wtf = "*"
 flask-login = "*"
 python-dotenv = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
