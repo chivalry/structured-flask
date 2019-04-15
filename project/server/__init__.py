@@ -1,7 +1,11 @@
 import os
 
 from flask import Flask, render_template
-from flask_debugtoolbar import DebugToolbarExtension
+try:
+    from flask_debugtoolbar import DebugToolbarExtension
+    toolbar = DebugToolbarExtension()
+except:
+    pass
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -11,7 +15,6 @@ from flask_login import LoginManager
 import project.server.constants as const
 
 # instantiate the extensions
-toolbar = DebugToolbarExtension()
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -31,7 +34,10 @@ def create_app():
     app_settings = os.getenv('APP_SETTINGS', 'project.server.config.ProdConfig')
     app.config.from_object(app_settings)
 
-    toolbar.init_app(app)
+    try:
+        toolbar.init_app(app)
+    except:
+        pass
     bootstrap.init_app(app)
     db.init_app(app)
     bcrypt.init_app(app)
