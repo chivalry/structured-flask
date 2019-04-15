@@ -7,7 +7,7 @@ from project.server import db, bcrypt
 
 
 class AbstractModel(db.Model):
-    """An abstract model with basic items required bot all models."""
+    """An abstract model with basic items required by all models."""
     __abstract__ = True
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
