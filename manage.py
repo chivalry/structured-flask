@@ -1,6 +1,4 @@
 import subprocess
-import unittest
-import sys
 
 from flask.cli import FlaskGroup
 
@@ -19,17 +17,6 @@ cli = FlaskGroup(create_app=create_app)
 def create_data():
     """Create sample data."""
     pass
-
-
-@cli.command()
-def test():
-    """Runs the unit tests without test coverage."""
-    tests = unittest.TestLoader().discover('project/tests', pattern='test_*.py')
-    result = unittest.TextTestRunner(verbosity=2).run(tests)
-    if result.wasSuccessful():
-        sys.exit(0)
-    else:
-        sys.exit(1)
 
 
 @cli.command()
