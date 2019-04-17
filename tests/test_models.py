@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.exc import IntegrityError
 
-from project.server.models import User
+from app.server.models import User
 import tests.test_constants as tconst
 
 def test_incorrect_parameters(database):

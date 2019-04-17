@@ -8,7 +8,7 @@ def test_test_app(app):
 
 
 def test_dev_config(blank_app):
-    blank_app.config.from_object('project.server.config.DevConfig')
+    blank_app.config.from_object('app.server.config.DevConfig')
     assert not blank_app.config['TESTING']
     assert not blank_app.config['WTF_CSRF_ENABLED']
     assert blank_app.config['DEBUG_TB_ENABLED']
@@ -17,7 +17,7 @@ def test_dev_config(blank_app):
 
 
 def test_prod_config(blank_app):
-    blank_app.config.from_object('project.server.config.ProdConfig')
+    blank_app.config.from_object('app.server.config.ProdConfig')
     assert not blank_app.config['TESTING']
     assert not blank_app.config['DEBUG_TB_ENABLED']
     assert blank_app.config['WTF_CSRF_ENABLED']

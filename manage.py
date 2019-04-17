@@ -4,7 +4,7 @@ import sys
 
 from flask.cli import FlaskGroup
 
-from project.server import create_app
+from app.server import create_app
 
 __author__ = 'Charles Ross'
 __email__ = 'chivalry@mac.com'
@@ -24,7 +24,7 @@ def create_data():
 @cli.command()
 def test():
     """Runs the unit tests without test coverage."""
-    tests = unittest.TestLoader().discover('project/tests', pattern='test_*.py')
+    tests = unittest.TestLoader().discover('app.tests', pattern='test_*.py')
     result = unittest.TextTestRunner(verbosity=2).run(tests)
     if result.wasSuccessful():
         sys.exit(0)
@@ -34,7 +34,7 @@ def test():
 
 @cli.command()
 def flake():
-    """Runs flake8 on the project."""
+    """Runs flake8 on the app."""
     subprocess.run(['flake8'])
 
 

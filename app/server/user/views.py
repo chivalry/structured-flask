@@ -1,10 +1,10 @@
 from flask import render_template, Blueprint, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, login_required
 
-from project.server import bcrypt
-from project.server.models import User
-from project.server.user.forms import LoginForm
-import project.server.constants as const
+from app.server import bcrypt
+from app.server.models import User
+from app.server.user.forms import LoginForm
+import app.server.constants as const
 
 user_blueprint = Blueprint('user', __name__)
 

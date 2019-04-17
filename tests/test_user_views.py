@@ -2,10 +2,10 @@ import datetime
 
 from flask_login import current_user
 
-import project.server.constants as const
-from project.server import bcrypt
-from project.server.models import User
-from project.server.user.forms import LoginForm
+import app.server.constants as const
+from app.server import bcrypt
+from app.server.models import User
+from app.server.user.forms import LoginForm
 import tests.test_constants as tconst
 
 

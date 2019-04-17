@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import current_app
 from flask_login import UserMixin
 
-from project.server import db, bcrypt
+from app.server import db, bcrypt
 
 
 class AbstractModel(db.Model):

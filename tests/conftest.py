@@ -1,14 +1,14 @@
 import pytest
 
-from project.server import create_app, db
-from project.server.models import User
+from app.server import create_app, db
+from app.server.models import User
 import tests.test_constants as tconst
 
 
 @pytest.fixture(scope='module')
 def app():
     app = create_app()
-    app.config.from_object('project.server.config.TestConfig')
+    app.config.from_object('app.server.config.TestConfig')
     context = app.app_context()
     context.push()
     yield app

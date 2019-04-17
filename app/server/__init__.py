@@ -12,7 +12,7 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_login import LoginManager
 
-import project.server.constants as const
+import app.server.constants as const
 
 # instantiate the extensions
 bootstrap = Bootstrap()
@@ -31,7 +31,7 @@ def create_app():
             static_folder='../client/static'
     )
 
-    app_settings = os.getenv('APP_SETTINGS', 'project.server.config.ProdConfig')
+    app_settings = os.getenv('APP_SETTINGS', 'app.server.config.ProdConfig')
     app.config.from_object(app_settings)
 
     try:
@@ -44,12 +44,12 @@ def create_app():
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
-    from project.server.main.views import main_blueprint
-    from project.server.user.views import user_blueprint
+    from app.server.main.views import main_blueprint
+    from app.server.user.views import user_blueprint
     app.register_blueprint(main_blueprint)
     app.register_blueprint(user_blueprint)
 
-    from project.server.models import User
+    from app.server.models import User
 
     login_manager.login_view = 'user.login'
     login_manager.login_message = const.LOGIN_DIRECTIVE_MSG
