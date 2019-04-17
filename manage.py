@@ -4,7 +4,7 @@ import sys
 
 from flask.cli import FlaskGroup
 
-from app.server import create_app
+from app import create_app
 
 __author__ = 'Charles Ross'
 __email__ = 'chivalry@mac.com'

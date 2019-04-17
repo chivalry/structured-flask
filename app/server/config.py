@@ -10,7 +10,7 @@ class Config(object):
     """Base configuration."""
 
     ADMINS = ['chivalry@mac.com']
-    APP_NAME = os.getenv('APP_NAME', 'Flask Skeleton')
+    APP_NAME = os.getenv('APP_NAME', 'Structured Flask')
     BCRYPT_LOG_ROUNDS = 4
     DEBUG_TB_ENABLED = False
     DEBUG_TB_PROFILER_ENABLED = True
