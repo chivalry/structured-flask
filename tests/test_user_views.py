@@ -1,6 +1,10 @@
+import datetime
+
 from flask_login import current_user
 
 import project.server.constants as const
+from project.server import bcrypt
+from project.server.models import User
 from project.server.user.forms import LoginForm
 import tests.test_constants as tconst
 
@@ -40,3 +44,28 @@ def test_validate_success_login_form(app):
 def test_invalid_email_invalidates_form(app):
     form = LoginForm(email='not and email', password='example')
     assert not form.validate()
+
+
+def test_first_user_has_id(client, database):
+    with client:
+        log_in(client)
+        assert current_user.id == 1
+
+
+def test_registered_on_defaults_to_datetime(client, database):
+    with client:
+        log_in(client)
+        user = User.query.get(1)
+        assert isinstance(user.timestamp, datetime.datetime)
+
+
+def test_check_password(database):
+    user = User.query.get(1)
+    assert bcrypt.check_password_hash(user.password, tconst.admin_password)
+    assert not bcrypt.check_password_hash(user.password, 'foobar')
+
+
+def test_failed_loging(client, database):
+    with client:
+        response = log_in(client, password='foobar')
+        assert const.LOGIN_FAILURE_MSG in str(response.data)
