@@ -4,7 +4,7 @@ from flask import Flask, render_template
 try:
     from flask_debugtoolbar import DebugToolbarExtension
     toolbar = DebugToolbarExtension()
-except:
+except ImportError:
     pass
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -36,7 +36,7 @@ def create_app():
 
     try:
         toolbar.init_app(app)
-    except:
+    except NameError:
         pass
     bootstrap.init_app(app)
     db.init_app(app)
