@@ -1,6 +1,7 @@
 import datetime
 
 from flask_login import current_user
+import pytest
 
 from app import bcrypt, User, LoginForm
 from app import constants as const
@@ -13,7 +14,8 @@ def log_in(client, email=None, password=None):
     return client.post('/login', data=dict(email=email, password=password), follow_redirects=True)
 
 
-def test_correct_login(client, database):
+@pytest.mark.usefixtures('database')
+def test_correct_login(client):
     with client:
         response = log_in(client)
         assert 'Logout' in str(response.data)
