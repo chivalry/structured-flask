@@ -21,7 +21,7 @@ def test_correct_login(client, database):
         assert current_user.is_active
 
 
-def test_logout_behaves_correctly(client, database):
+def test_logout_behaves_correctly(client):
     with client:
         log_in(client)
         response = client.get('/logout', follow_redirects=True)
@@ -29,28 +29,28 @@ def test_logout_behaves_correctly(client, database):
         assert not current_user.is_active
 
 
-def test_logout_route_requires_login(app, client, database):
+def test_logout_route_requires_login(app, client):
     response = client.get('/logout', follow_redirects=True)
     assert app.login_manager.login_message in str(response.data)
 
 
-def test_validate_success_login_form(app):
+def test_validate_success_login_form():
     form = LoginForm(email=tconst.admin_email, password=tconst.admin_password)
     assert form.validate()
 
 
-def test_invalid_email_invalidates_form(app):
+def test_invalid_email_invalidates_form():
     form = LoginForm(email='not and email', password='example')
     assert not form.validate()
 
 
-def test_first_user_has_id(client, database):
+def test_first_user_has_id(client):
     with client:
         log_in(client)
         assert current_user.id == 1
 
 
-def test_registered_on_defaults_to_datetime(client, database):
+def test_registered_on_defaults_to_datetime(client):
     with client:
         log_in(client)
         user = User.query.get(1)
@@ -63,7 +63,7 @@ def test_check_password(database):
     assert not bcrypt.check_password_hash(user.password, 'foobar')
 
 
-def test_failed_loging(client, database):
+def test_failed_login(client):
     with client:
         response = log_in(client, password='foobar')
         assert const.LOGIN_FAILURE_MSG in str(response.data)
