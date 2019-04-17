@@ -5,10 +5,19 @@ from project.server.models import User
 import tests.test_constants as tconst
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='module')
 def app():
     app = create_app()
     app.config.from_object('project.server.config.TestConfig')
+    context = app.app_context()
+    context.push()
+    yield app
+    context.pop()
+
+
+@pytest.fixture(scope='module')
+def blank_app():
+    app = create_app()
     context = app.app_context()
     context.push()
     yield app
@@ -21,7 +30,7 @@ def client(app):
     yield client
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='module')
 def database(app):
     db.create_all()
     user = User(email=tconst.admin_email, password=tconst.admin_password)
