@@ -9,8 +9,8 @@ from . import test_constants as tconst
 
 
 def log_in(client, email=None, password=None):
-    email = email or tconst.admin_email
-    password = password or tconst.admin_password
+    email = email or tconst.ADMIN_EMAIL
+    password = password or tconst.ADMIN_PASSWORD
     return client.post('/login', data=dict(email=email, password=password), follow_redirects=True)
 
 
@@ -19,7 +19,7 @@ def test_correct_login(client):
     with client:
         response = log_in(client)
         assert 'Logout' in str(response.data)
-        assert current_user.email == tconst.admin_email
+        assert current_user.email == tconst.ADMIN_EMAIL
         assert current_user.is_active
 
 
@@ -37,7 +37,7 @@ def test_logout_route_requires_login(app, client):
 
 
 def test_validate_success_login_form():
-    form = LoginForm(email=tconst.admin_email, password=tconst.admin_password)
+    form = LoginForm(email=tconst.ADMIN_EMAIL, password=tconst.ADMIN_PASSWORD)
     assert form.validate()
 
 
@@ -61,7 +61,7 @@ def test_registered_on_defaults_to_datetime(client):
 
 def test_check_password(database):
     user = User.query.get(1)
-    assert bcrypt.check_password_hash(user.password, tconst.admin_password)
+    assert bcrypt.check_password_hash(user.password, tconst.ADMIN_PASSWORD)
     assert not bcrypt.check_password_hash(user.password, 'foobar')
 
 

@@ -1,2 +1,2 @@
-admin_email = 'ad@min.com'
-admin_password = 'admin'
+ADMIN_EMAIL = 'ad@min.com'
+ADMIN_PASSWORD = 'admin'

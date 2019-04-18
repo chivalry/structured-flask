@@ -32,7 +32,7 @@ def client(app):
 @pytest.fixture(scope='module')
 def database(app):
     db.create_all()
-    user = User(email=tconst.admin_email, password=tconst.admin_password)
+    user = User(email=tconst.ADMIN_EMAIL, password=tconst.ADMIN_PASSWORD)
     db.session.add(user)
     db.session.commit()
     yield db

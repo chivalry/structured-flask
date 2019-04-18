@@ -11,7 +11,7 @@ def test_incorrect_parameters(database):
 
 
 def test_duplicate_emails_prohibited(database):
-    user = User(email=tconst.admin_email, password=tconst.admin_password)
+    user = User(email=tconst.ADMIN_EMAIL, password=tconst.ADMIN_PASSWORD)
     database.session.add(user)
     with pytest.raises(IntegrityError):
         database.session.commit()
