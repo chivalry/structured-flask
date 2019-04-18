@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 flask-debugtoolbar = "*"
 flake8 = "*"
+faker = "*"
 
 [packages]
 flask = "*"
