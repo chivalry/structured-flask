@@ -1,9 +1,8 @@
 from flask import render_template, Blueprint, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, login_required
 
-from .. import bcrypt
-from ..models import User
-from .forms import LoginForm
+from . import LoginForm
+from .. import bcrypt, User
 from .. import constants as const
 
 user_blueprint = Blueprint('user', __name__)

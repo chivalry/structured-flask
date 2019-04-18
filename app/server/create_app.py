@@ -14,7 +14,6 @@ from flask_login import LoginManager
 
 from . import constants as const
 
-# instantiate the extensions
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -44,12 +43,12 @@ def create_app():
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
-    from app.server.main.views import main_blueprint
-    from app.server.user.views import user_blueprint
+    from .main.views import main_blueprint
+    from .user.views import user_blueprint
     app.register_blueprint(main_blueprint)
     app.register_blueprint(user_blueprint)
 
-    from app.server.models import User
+    from .models import User
 
     login_manager.login_view = 'user.login'
     login_manager.login_message = const.LOGIN_DIRECTIVE_MSG
