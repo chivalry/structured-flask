@@ -37,3 +37,8 @@ def blank_app():
     context.push()
     yield app
     context.pop()
+
+
+@pytest.fixture(scope='function')
+def runner(app):
+    yield app.test_cli_runner()

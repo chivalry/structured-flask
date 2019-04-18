@@ -60,6 +60,7 @@ def create_fake_data():
 @click.option('-c', '--count', default=100, help='The number of fake users to create.')
 @click.option('--no-echo', is_flag=True, default=False, help='If passed, suppressed record output')
 def create_fake_users(count, no_echo):
+    """Create the indicated number of fake users and output their emails and passwords."""
     users = __create_fake_users(count=count)
     if not no_echo:
         for user in users:

@@ -16,6 +16,11 @@ class AbstractModel(db.Model):
         return '<{}: "{}">'.format(self.__class__.__name__, self.id)
 
 
+    @classmethod
+    def count(cls):
+        return db.session.query(cls.id).count()
+
+
 class User(UserMixin, AbstractModel):
     """A simple user model that will support logging into the app."""
     __tablename__ = 'users'
