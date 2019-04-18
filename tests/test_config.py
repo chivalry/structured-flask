@@ -1,7 +1,7 @@
 from flask import current_app
 
 
-def test_test_app(app):
+def test_test_config(app):
     assert app.config['TESTING']
     assert app.config['DEBUG']
     assert app.config['BCRYPT_LOG_ROUNDS'] == 4

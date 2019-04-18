@@ -15,21 +15,6 @@ def app():
 
 
 @pytest.fixture(scope='module')
-def blank_app():
-    app = create_app()
-    context = app.app_context()
-    context.push()
-    yield app
-    context.pop()
-
-
-@pytest.fixture
-def client(app):
-    client = app.test_client()
-    yield client
-
-
-@pytest.fixture(scope='module')
 def database(app):
     db.create_all()
     user = User(email=tconst.ADMIN_EMAIL, password=tconst.ADMIN_PASSWORD)
@@ -37,3 +22,18 @@ def database(app):
     db.session.commit()
     yield db
     db.drop_all()
+
+
+@pytest.fixture(scope='function')
+def client(app):
+    client = app.test_client()
+    yield client
+
+
+@pytest.fixture(scope='function')
+def blank_app():
+    app = create_app()
+    context = app.app_context()
+    context.push()
+    yield app
+    context.pop()
