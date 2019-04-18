@@ -33,10 +33,10 @@ def __create_fake_users(count=100):
     users = []
     fake = Faker()
     for _ in range(count):
-        email = fake.company_email()
+        email = fake.email()
         password = fake.password()
         users.append((email, password))
-        user = User(email=fake.company_email(), password=fake.password())
+        user = User(email=email, password=password)
         db.session.add(user)
     db.session.commit()
     return users
