@@ -69,3 +69,13 @@ def test_failed_login(client):
     with client:
         response = log_in(client, password='foobar')
         assert const.LOGIN_FAILURE_MSG in str(response.data)
+
+
+def test_login_page_has_success_code(client):
+    response = client.get('/login')
+    assert response.status_code == 200
+
+
+def test_form_submission_has_success_code(client):
+    response = client.post('/login')
+    assert response.status_code == 200
