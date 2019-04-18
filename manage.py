@@ -1,10 +1,8 @@
-import subprocess
-import unittest
-import sys
+import click
 
 from flask.cli import FlaskGroup
 
-from app import create_app
+from app import create_app, db, User
 
 __author__ = 'Charles Ross'
 __email__ = 'chivalry@mac.com'
@@ -21,21 +19,13 @@ def create_data():
     pass
 
 
-@cli.command()
-def test():
-    """Runs the unit tests without test coverage."""
-    tests = unittest.TestLoader().discover('app.tests', pattern='test_*.py')
-    result = unittest.TextTestRunner(verbosity=2).run(tests)
-    if result.wasSuccessful():
-        sys.exit(0)
-    else:
-        sys.exit(1)
-
-
-@cli.command()
-def flake():
-    """Runs flake8 on the app."""
-    subprocess.run(['flake8'])
+@app.cli.command()
+@click.option('-e', '--email', prompt='Email', help="The user's email address.")
+@click.option('-p', '--password', prompt='Password', help="The user's password.")
+def create_user(email, password):
+    user = User(email=email, password=password)
+    db.session.add(user)
+    db.session.commit()
 
 
 if __name__ == '__main__':
