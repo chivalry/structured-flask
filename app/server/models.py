@@ -15,7 +15,6 @@ class AbstractModel(db.Model):
     def __repr__(self):
         return '<{}: "{}">'.format(self.__class__.__name__, self.id)
 
-
     @classmethod
     def count(cls):
         return db.session.query(cls.id).count()

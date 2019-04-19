@@ -1,0 +1,5 @@
+__author__ = 'Charles Ross'
+__email__ = 'chivalry@mac.com'
+__copyright__ = 'Copyright 2019, Charles Ross'
+__license__ = 'MIT'
+__version__ = '0.0.1'

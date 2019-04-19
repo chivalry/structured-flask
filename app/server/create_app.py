@@ -118,7 +118,8 @@ def create_app():
         __create_user(email=email, password=password)
 
     @app.cli.command()
-    @click.option('-c', '--count', default=100, help='The number of fake users to create.')
+    @click.option('-c', '--count', default=100,
+                  help='The number of fake users to create. Defaults to 100')
     @click.option('--no-echo', is_flag=True, default=False,
                   help='If passed, suppressed record output')
     def create_fake_users(count, no_echo):
