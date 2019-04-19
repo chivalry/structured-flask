@@ -15,12 +15,11 @@ flask-bootstrap = "*"
 flask-dotenv = "*"
 flask-migrate = "*"
 flask-sqlalchemy = "*"
-flask-testing = "*"
 flask-wtf = "*"
 flask-login = "*"
-python-dotenv = "*"
 gunicorn = "*"
 pytest = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
