@@ -11,6 +11,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_login import LoginManager
+import click
+from faker import Faker
+from sqlalchemy.exc import IntegrityError
 
 from . import constants as const
 
@@ -81,5 +84,53 @@ def create_app():
                 'db': db,
                 'User': User,
         }
+
+    def __create_user(email, password):
+        """Create the user record with the given information."""
+        user = User(email=email, password=password)
+        db.session.add(user)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            print('Error: Duplicate email address')
+
+    def __create_fake_users(count=100):
+        """Create the number of dummy users given by count.
+
+        Returns a list of the created users for possible echoing to the user.
+        """
+        users = []
+        fake = Faker()
+        for _ in range(count):
+            email = fake.email()
+            password = fake.password()
+            users.append((email, password))
+            user = User(email=email, password=password)
+            db.session.add(user)
+        db.session.commit()
+        return users
+
+    @app.cli.command()
+    @click.option('-e', '--email', prompt='Email', help="The user's email address.")
+    @click.option('-p', '--password', prompt='Password', help="The user's password.")
+    def create_user(email, password):
+        """Offer a CLI interface into creating a user."""
+        __create_user(email=email, password=password)
+
+    @app.cli.command()
+    @click.option('-c', '--count', default=100, help='The number of fake users to create.')
+    @click.option('--no-echo', is_flag=True, default=False,
+                  help='If passed, suppressed record output')
+    def create_fake_users(count, no_echo):
+        """Create the indicated number of fake users and output their emails and passwords."""
+        users = __create_fake_users(count=count)
+        if not no_echo:
+            for user in users:
+                print('{}: {}'.format(user[0], user[1]))
+
+    @app.cli.command()
+    def create_fake_data():
+        """Create dummy records in the database."""
+        __create_fake_users()
 
     return app
