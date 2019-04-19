@@ -29,8 +29,8 @@ def create_app():
 
     app = Flask(
             __name__,
-            template_folder='../client/templates',
-            static_folder='../client/static'
+            template_folder='./templates',
+            static_folder='./static'
     )
 
     app_settings = os.getenv('APP_SETTINGS', 'app.server.config.ProdConfig')
