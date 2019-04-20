@@ -1,11 +1,6 @@
 import os
 
 from flask import Flask, render_template
-try:
-    from flask_debugtoolbar import DebugToolbarExtension
-    toolbar = DebugToolbarExtension()
-except ImportError:
-    pass
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -36,20 +31,8 @@ def create_app():
     app_settings = os.getenv('APP_SETTINGS', 'app.server.config.ProdConfig')
     app.config.from_object(app_settings)
 
-    try:
-        toolbar.init_app(app)
-    except NameError:
-        pass
-    bootstrap.init_app(app)
-    db.init_app(app)
-    bcrypt.init_app(app)
-    migrate.init_app(app, db)
-    login_manager.init_app(app)
-
-    from .main.views import main_blueprint
-    from .user.views import user_blueprint
-    app.register_blueprint(main_blueprint)
-    app.register_blueprint(user_blueprint)
+    register_extensions(app)
+    register_blueprints(app)
 
     from .models import User
 
@@ -135,3 +118,25 @@ def create_app():
         __create_fake_users()
 
     return app
+
+
+def register_extensions(app):
+    """Conditionally register the extensions."""
+    try:
+        from flask_debugtoolbar import DebugToolbarExtension
+        DebugToolbarExtension(app)
+    except NameError:
+        pass
+    bootstrap.init_app(app)
+    db.init_app(app)
+    bcrypt.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
+
+
+def register_blueprints(app):
+    """Register the blueprints."""
+    from .main.views import main_blueprint
+    from .user.views import user_blueprint
+    app.register_blueprint(main_blueprint)
+    app.register_blueprint(user_blueprint)
