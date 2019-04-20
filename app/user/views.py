@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, login_required
 
-from . import LoginForm
+from . import LoginForm, ResetPasswordForm
 from .. import bcrypt, User
 from .. import constants as const
 
@@ -29,3 +29,11 @@ def logout():
     logout_user()
     flash(const.LOGOUT_SUCCESS_MSG, 'success')
     return redirect(url_for('main.home'))
+
+
+@user_blueprint.route('/reset', methods=['GET', 'POST'])
+def reset_password():
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        email = User.query.filter_by(email=form.email.data).first_or_404()
+        subject = 'Password reset requested'
