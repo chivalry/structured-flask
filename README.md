@@ -34,3 +34,10 @@ Included Libraries
 - [Flask-DebugToolbar](https://flask-debugtoolbar.readthedocs.io/en/latest/)
 - [flake8](http://flake8.pycqa.org/en/latest/)
 - [faker](https://faker.readthedocs.io/en/master/)
+
+Inspirations
+------------
+
+- [carc1n0gen](https://github.com/carc1n0gen)
+- [Flask Skeleton](https://github.com/realpython/cookiecutter-flask-skeleton)
+- [cookiecutter-flask](https://github.com/wdm0006/cookiecutter-flask)
