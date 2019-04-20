@@ -20,6 +20,7 @@ flask-login = "*"
 gunicorn = "*"
 pytest = "*"
 python-dotenv = "*"
+flask-mail = "*"
 
 [requires]
 python_version = "3.7"
