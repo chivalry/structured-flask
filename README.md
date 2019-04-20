@@ -38,6 +38,6 @@ Included Libraries
 Inspirations
 ------------
 
-- [carc1n0gen](https://github.com/carc1n0gen)
+- [flask-starter](https://github.com/carc1n0gen/flask-starter)
 - [Flask Skeleton](https://github.com/realpython/cookiecutter-flask-skeleton)
 - [cookiecutter-flask](https://github.com/wdm0006/cookiecutter-flask)
