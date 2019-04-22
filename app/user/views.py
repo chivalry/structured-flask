@@ -1,8 +1,12 @@
-from flask import render_template, Blueprint, url_for, redirect, flash, request
+from flask import (render_template, Blueprint, url_for, redirect, flash, request, current_app,
+                   abort)
 from flask_login import login_user, logout_user, login_required
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer
+from itsdangerous.exc import BadSignature
 
-from . import LoginForm, ResetPasswordForm
-from .. import bcrypt, User
+from . import LoginForm, ResetPasswordForm, PasswordForm
+from .. import mail, bcrypt, User, db
 from .. import constants as const
 
 user_blueprint = Blueprint('user', __name__)
@@ -32,8 +36,37 @@ def logout():
 
 
 @user_blueprint.route('/reset', methods=['GET', 'POST'])
-def reset_password():
+def reset():
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        email = User.query.filter_by(email=form.email.data).first_or_404()
-        subject = 'Password reset requested'
+        email = form.email.data
+        user = User.select_by_email(email=email)
+        if user:
+            timed_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+            token = timed_serializer.dumps(email, salt='recovery-token')
+            url = url_for('user.reset_with_token', token=token, _external=True)
+            html = render_template('email/recover.html', url=url)
+            msg = Message(html=html, recipients=[email], subject=const.RESET_EMAIL_SUBJECT)
+            mail.send(msg)
+        flash(const.RESET_PASSWORD_REQUEST_FLASH, 'success')
+        return redirect(url_for('user.login'))
+    return render_template('user/reset.html', form=form)
+
+
+@user_blueprint.route('/reset/<token>', methods=['GET', 'POST'])
+def reset_with_token(token):
+    timed_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    try:
+        email = timed_serializer.loads(token, salt='recovery-token', max_age=3600)
+    except BadSignature:
+        abort(404)
+    form = PasswordForm()
+    if form.validate_on_submit():
+        user = User.select_by_email(email=email)
+        if user:
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+        flash(const.RESET_PASSWORD_SUCCESS, 'success')
+        return redirect(url_for('user.login'))
+    return render_template('user/password.html', form=form)

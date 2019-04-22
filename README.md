@@ -25,6 +25,7 @@ Included Libraries
 - [Flask-SQLAlchemy](https://www.sqlalchemy.org)
 - [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/)
 - [Flask-Login](https://flask-login.readthedocs.io/en/latest/)
+- [Flask-Mail](https://pythonhosted.org/flask-mail/)
 - [Flask-WTF](https://flask-wtf.readthedocs.io/en/stable/)
 - [Flask-Bootstrap](https://pythonhosted.org/Flask-Bootstrap/)
 - [Flask-Bcrypt](https://flask-bcrypt.readthedocs.io/en/latest/)

@@ -7,5 +7,10 @@ class ResetPasswordForm(FlaskForm):
     email = StringField('Email Address', [DataRequired(), Email()])
 
 
-class LoginForm(ResetPasswordForm):
+class PasswordForm(FlaskForm):
+    password = PasswordField('Password', [DataRequired()])
+
+
+class LoginForm(FlaskForm):
+    email = StringField('Email Address', [DataRequired(), Email()])
     password = PasswordField('Password', [DataRequired()])

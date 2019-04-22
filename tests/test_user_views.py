@@ -1,9 +1,10 @@
 import datetime
 
+from flask import g
 from flask_login import current_user
 import pytest
 
-from app import bcrypt, User, LoginForm
+from app import bcrypt, User, LoginForm, mail
 from app import constants as const
 from . import test_constants as tconst
 
@@ -42,7 +43,7 @@ def test_validate_success_login_form():
 
 
 def test_invalid_email_invalidates_form():
-    form = LoginForm(email='not and email', password='example')
+    form = LoginForm(email='not an email', password='example')
     assert not form.validate()
 
 
@@ -79,3 +80,18 @@ def test_login_page_has_success_code(client):
 def test_form_submission_has_success_code(client):
     response = client.post('/login')
     assert response.status_code == 200
+
+
+def test_reset_route(client):
+    response = client.get('/login')
+    assert response.status_code == 200
+
+@pytest.mark.usefixtures('database')
+def test_reset_email(client):
+    with mail.record_messages() as outbox:
+        response = client.post('/reset', data=dict(email=tconst.ADMIN_EMAIL),
+                               follow_redirects=True)
+        msg = outbox[-1]
+        assert const.RESET_PASSWORD_REQUEST_FLASH in str(response.data)
+        assert msg.subject == const.RESET_EMAIL_SUBJECT
+        assert 'Reset Password' in msg.body

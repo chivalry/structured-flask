@@ -35,5 +35,15 @@ class User(UserMixin, AbstractModel):
         ).decode('utf-8')
         self.admin = admin
 
+    def set_password(self, password):
+        self.password = bcrypt.generate_password_hash(
+                password, current_app.config['BCRYPT_LOG_ROUNDS']
+        ).decode('utf-8')
+
     def __repr__(self):
         return '<User {}>'.format(self.email)
+
+    @classmethod
+    def select_by_email(cls, email):
+        """Return the unique user identified by the email address."""
+        return cls.query.filter_by(email=email)

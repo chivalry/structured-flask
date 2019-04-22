@@ -1,1 +1,1 @@
-from .forms import LoginForm, ResetPasswordForm  # noqa F401
+from .forms import LoginForm, ResetPasswordForm, PasswordForm  # noqa F401

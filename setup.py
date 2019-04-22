@@ -1,4 +1,3 @@
-import os
 from setuptools import setup
 
 setup(
@@ -12,7 +11,7 @@ setup(
         platform='any',
         install_requires=[
             'flask',
-        ]
+        ],
         classifiers=[
             'Development Status :: 4 - Beta',
             'Environment :: Web Environment',

@@ -30,7 +30,7 @@ def create_app():
             static_folder='./static'
     )
 
-    app_settings = os.getenv('APP_SETTINGS', 'app.server.config.ProdConfig')
+    app_settings = os.getenv('APP_SETTINGS', 'app.ProdConfig')
     app.config.from_object(app_settings)
 
     register_extensions(app)
