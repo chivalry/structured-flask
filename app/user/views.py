@@ -45,8 +45,10 @@ def reset():
             timed_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
             token = timed_serializer.dumps(email, salt='recovery-token')
             url = url_for('user.reset_with_token', token=token, _external=True)
+            body = 'Reset Password: ' + url
             html = render_template('email/recover.html', url=url)
-            msg = Message(html=html, recipients=[email], subject=const.RESET_EMAIL_SUBJECT)
+            msg = Message(body=body, html=html, recipients=[email],
+                          subject=const.RESET_EMAIL_SUBJECT)
             mail.send(msg)
         flash(const.RESET_PASSWORD_REQUEST_FLASH, 'success')
         return redirect(url_for('user.login'))
@@ -62,8 +64,9 @@ def reset_with_token(token):
         abort(404)
     form = PasswordForm()
     if form.validate_on_submit():
-        user = User.select_by_email(email=email)
-        if user:
+        query = User.select_by_email(email=email)
+        if query:
+            user = query.first()
             user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()

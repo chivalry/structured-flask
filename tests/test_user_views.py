@@ -1,4 +1,6 @@
 import datetime
+import re
+from urllib.parse import urlparse
 
 from flask import g
 from flask_login import current_user
@@ -94,4 +96,11 @@ def test_reset_email(client):
         msg = outbox[-1]
         assert const.RESET_PASSWORD_REQUEST_FLASH in str(response.data)
         assert msg.subject == const.RESET_EMAIL_SUBJECT
+        assert 'Reset Password' in msg.html
         assert 'Reset Password' in msg.body
+        pattern = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+        url = re.findall(pattern, msg.body)[0]
+        path = urlparse(url).path
+        response = client.post(path, data=dict(password='newpass'), follow_redirects=True)
+        log_in(client, tconst.ADMIN_EMAIL, 'newpass')
+        assert 'Logout' in str(response.data)
