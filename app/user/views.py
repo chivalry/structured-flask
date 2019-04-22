@@ -45,7 +45,7 @@ def reset():
             timed_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
             token = timed_serializer.dumps(email, salt='recovery-token')
             url = url_for('user.reset_with_token', token=token, _external=True)
-            body = 'Reset Password: ' + url
+            body = render_template('email/recover.txt', url=url)
             html = render_template('email/recover.html', url=url)
             msg = Message(body=body, html=html, recipients=[email],
                           subject=const.RESET_EMAIL_SUBJECT)
