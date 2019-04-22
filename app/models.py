@@ -25,18 +25,22 @@ class User(UserMixin, AbstractModel):
     __tablename__ = 'users'
 
     email = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
+    _hash = db.Column(db.String(255), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self, email, password, admin=False):
         self.email = email
-        self.password = bcrypt.generate_password_hash(
-                password, current_app.config['BCRYPT_LOG_ROUNDS']
-        ).decode('utf-8')
+        self.password = password
         self.admin = admin
 
-    def set_password(self, password):
-        self.password = bcrypt.generate_password_hash(
+    @property
+    def password(self):
+        """Password is not stored, return the hash."""
+        return self._hash
+
+    @password.setter
+    def password(self, password):
+        self._hash = bcrypt.generate_password_hash(
                 password, current_app.config['BCRYPT_LOG_ROUNDS']
         ).decode('utf-8')
 

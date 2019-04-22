@@ -67,7 +67,7 @@ def reset_with_token(token):
         query = User.select_by_email(email=email)
         if query:
             user = query.first()
-            user.set_password(form.password.data)
+            user.password = form.password.data
             db.session.add(user)
             db.session.commit()
         flash(const.RESET_PASSWORD_SUCCESS, 'success')
