@@ -1,12 +1,13 @@
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request, current_app
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_babel import Babel
 import click
 from faker import Faker
 from sqlalchemy.exc import IntegrityError
@@ -19,6 +20,7 @@ bcrypt = Bcrypt()
 migrate = Migrate()
 login_manager = LoginManager()
 mail = Mail()
+babel = Babel()
 
 
 def create_app():
@@ -133,6 +135,7 @@ def register_extensions(app):
     migrate.init_app(app, db)
     login_manager.init_app(app)
     mail.init_app(app)
+    babel.init_app(app)
 
 
 def register_blueprints(app):
@@ -141,3 +144,18 @@ def register_blueprints(app):
     from .user.views import user_blueprint
     app.register_blueprint(main_blueprint)
     app.register_blueprint(user_blueprint)
+
+
+@babel.localeselector
+def get_locale():
+    language = request.accept_languages.best_match(current_app.config['LANGUAGES'])
+    if language:
+        return language
+    locales = [item[0] for item in list(request.accept_languages)]
+    languages = [str[0:2] for str in locales]
+    try:
+        language = [lang for lang in languages if lang in current_app.config['LANGUAGES']][0]
+    except IndexError:
+        return 'en'
+    return language
+
