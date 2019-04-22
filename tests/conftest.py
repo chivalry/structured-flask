@@ -18,8 +18,6 @@ def app():
 def database(app):
     db.create_all()
     user = User(email=tconst.ADMIN_EMAIL, password=tconst.ADMIN_PASSWORD)
-    db.session.add(user)
-    db.session.commit()
     yield db
     db.drop_all()
 

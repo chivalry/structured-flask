@@ -72,10 +72,8 @@ def create_app():
 
     def __create_user(email, password):
         """Create the user record with the given information."""
-        user = User(email=email, password=password)
-        db.session.add(user)
         try:
-            db.session.commit()
+            user = User(email=email, password=password)
         except IntegrityError:
             print('Error: Duplicate email address')
 
@@ -90,7 +88,7 @@ def create_app():
             email = fake.email()
             password = fake.password()
             users.append((email, password))
-            user = User(email=email, password=password)
+            user = User(email=email, password=password, commit=False)
             db.session.add(user)
         db.session.commit()
         return users

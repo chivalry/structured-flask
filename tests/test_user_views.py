@@ -2,11 +2,10 @@ import datetime
 import re
 from urllib.parse import urlparse
 
-from flask import g
 from flask_login import current_user
 import pytest
 
-from app import bcrypt, User, LoginForm, mail
+from app import User, LoginForm, mail
 from app import constants as const
 from . import test_constants as tconst
 
@@ -64,8 +63,8 @@ def test_registered_on_defaults_to_datetime(client):
 
 def test_check_password(database):
     user = User.query.get(1)
-    assert bcrypt.check_password_hash(user.password, tconst.ADMIN_PASSWORD)
-    assert not bcrypt.check_password_hash(user.password, 'foobar')
+    assert user.check_password(tconst.ADMIN_PASSWORD)
+    assert not user.check_password('foobar')
 
 
 def test_failed_login(client):
@@ -88,6 +87,7 @@ def test_reset_route(client):
     response = client.get('/login')
     assert response.status_code == 200
 
+
 @pytest.mark.usefixtures('database')
 def test_reset_email(client):
     with mail.record_messages() as outbox:
@@ -98,9 +98,23 @@ def test_reset_email(client):
         assert msg.subject == const.RESET_EMAIL_SUBJECT
         assert 'Reset Password' in msg.html
         assert 'Reset Password' in msg.body
-        pattern = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+        pattern = ('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*'
+                   + '\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')  # noqa W605
         url = re.findall(pattern, msg.body)[0]
         path = urlparse(url).path
         response = client.post(path, data=dict(password='newpass'), follow_redirects=True)
         log_in(client, tconst.ADMIN_EMAIL, 'newpass')
         assert 'Logout' in str(response.data)
+
+
+@pytest.mark.usefixtures('database')
+def test_silent_reset_failures(client):
+    with mail.record_messages() as outbox:
+        response = client.post('/reset', data=dict(email='no_address@no-domain.com'),
+                               follow_redirects=True)
+        assert len(outbox) == 0
+
+
+def test_bad_token_gets_404(client):
+    response = client.get('/reset/not-a-token', follow_redirects=True)
+    assert response.status_code == 404

@@ -15,6 +15,10 @@ class AbstractModel(db.Model):
     def __repr__(self):
         return '<{}: "{}">'.format(self.__class__.__name__, self.id)
 
+    def add_and_commit(self):
+        db.session.add(self)
+        db.session.commit()
+
     @classmethod
     def count(cls):
         return db.session.query(cls.id).count()
@@ -28,10 +32,15 @@ class User(UserMixin, AbstractModel):
     _hash = db.Column(db.String(255), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, email, password, admin=False):
+    def __init__(self, email, password, admin=False, commit=True):
         self.email = email
         self.password = password
         self.admin = admin
+        if commit:
+            self.add_and_commit()
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self._hash, password)
 
     @property
     def password(self):
@@ -39,10 +48,12 @@ class User(UserMixin, AbstractModel):
         return self._hash
 
     @password.setter
-    def password(self, password):
+    def password(self, password, commit=True):
         self._hash = bcrypt.generate_password_hash(
                 password, current_app.config['BCRYPT_LOG_ROUNDS']
         ).decode('utf-8')
+        if commit:
+            self.add_and_commit()
 
     def __repr__(self):
         return '<User {}>'.format(self.email)

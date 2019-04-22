@@ -6,7 +6,7 @@ from itsdangerous import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature
 
 from . import LoginForm, ResetPasswordForm, PasswordForm
-from .. import mail, bcrypt, User, db
+from .. import mail, User, db
 from .. import constants as const
 
 user_blueprint = Blueprint('user', __name__)
@@ -17,7 +17,7 @@ def login():
     form = LoginForm(request.form)
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, request.form['password']):
+        if user and user.check_password(request.form['password']):
             login_user(user)
             flash(const.LOGIN_SUCCESS_MSG, 'success')
             return redirect(url_for('main.home'))
@@ -37,10 +37,11 @@ def logout():
 
 @user_blueprint.route('/reset', methods=['GET', 'POST'])
 def reset():
+    """Sends a tokenized email link to the user. Fails silently if email doesn't exist."""
     form = ResetPasswordForm()
     if form.validate_on_submit():
         email = form.email.data
-        user = User.select_by_email(email=email)
+        user = User.select_by_email(email=email).first()
         if user:
             timed_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
             token = timed_serializer.dumps(email, salt='recovery-token')
@@ -57,6 +58,7 @@ def reset():
 
 @user_blueprint.route('/reset/<token>', methods=['GET', 'POST'])
 def reset_with_token(token):
+    """Updates the user's password. Fails silently if email doesn't exit."""
     timed_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     try:
         email = timed_serializer.loads(token, salt='recovery-token', max_age=3600)
@@ -64,12 +66,8 @@ def reset_with_token(token):
         abort(404)
     form = PasswordForm()
     if form.validate_on_submit():
-        query = User.select_by_email(email=email)
-        if query:
-            user = query.first()
-            user.password = form.password.data
-            db.session.add(user)
-            db.session.commit()
+        user = User.select_by_email(email=email).first()
+        user.password = form.password.data
         flash(const.RESET_PASSWORD_SUCCESS, 'success')
         return redirect(url_for('user.login'))
     return render_template('user/password.html', form=form)
