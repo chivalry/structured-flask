@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, current_app
+from flask import Flask, render_template, request, current_app, template_rendered
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -75,7 +75,7 @@ def create_app():
     def __create_user(email, password):
         """Create the user record with the given information."""
         try:
-            user = User(email=email, password=password)
+             User(email=email, password=password)
         except IntegrityError:
             print('Error: Duplicate email address')
 

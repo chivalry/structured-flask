@@ -2,12 +2,14 @@ import datetime
 import re
 from urllib.parse import urlparse
 
+from flask import current_app
 from flask_login import current_user
 import pytest
 
 from app import User, LoginForm, mail
 from app import constants as const
 from . import test_constants as tconst
+from .conftest import template_used
 
 
 def log_in(client, email=None, password=None):
@@ -83,13 +85,15 @@ def test_form_submission_has_success_code(client):
     assert response.status_code == 200
 
 
-def test_reset_route(client):
+def test_reset_route_code(client):
     response = client.get('/login')
     assert response.status_code == 200
 
 
 @pytest.mark.usefixtures('database')
 def test_reset_email(client):
+    assert current_app.config['TESTING'] == True
+    current_app.config['MAIL_SUPPRESS_SEND'] = True
     with mail.record_messages() as outbox:
         response = client.post('/reset', data=dict(email=tconst.ADMIN_EMAIL),
                                follow_redirects=True)
@@ -118,3 +122,18 @@ def test_silent_reset_failures(client):
 def test_bad_token_gets_404(client):
     response = client.get('/reset/not-a-token', follow_redirects=True)
     assert response.status_code == 404
+
+
+def test_login_route_template(app, client):
+    count, name = template_used(app, client, '/login')
+    assert count == 1 and name == 'user/login.html'
+
+
+def test_logout_route_template(app, client):
+    count, name = template_used(app, client, '/logout')
+    assert count == 1 and name == 'user/login.html'
+
+
+def test_reset_route_template(app, client):
+    count, name = template_used(app, client, '/reset')
+    assert count == 1 and name == 'user/reset.html'

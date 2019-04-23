@@ -58,7 +58,7 @@ def reset():
 
 @user_blueprint.route('/reset/<token>', methods=['GET', 'POST'])
 def reset_with_token(token):
-    """Updates the user's password. Fails silently if email doesn't exit."""
+    """Updates the user's password."""
     timed_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     try:
         email = timed_serializer.loads(token, salt='recovery-token', max_age=3600)

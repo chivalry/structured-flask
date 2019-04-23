@@ -1,4 +1,7 @@
 import pytest
+from contextlib import contextmanager
+
+from flask import template_rendered
 
 from app import create_app, db, User
 from . import test_constants as tconst
@@ -40,3 +43,23 @@ def blank_app():
 @pytest.fixture(scope='function')
 def runner(app):
     yield app.test_cli_runner()
+
+
+@contextmanager
+def captured_templates(app):
+    """Use signals to capture the templates rendered for a route."""
+    recorded = []
+    def record(sender, template, context, **extra):
+        recorded.append((template, context))
+    template_rendered.connect(record, app)
+    try:
+        yield recorded
+    finally:
+        template_rendered.disconnect(record, app)
+
+
+def template_used(app, client, route):
+    """Return True if the named template was the only one rendered by the route."""
+    with captured_templates(app) as templates:
+        response = client.get(route, follow_redirects=True)
+        return len(templates), templates[0][0].name
