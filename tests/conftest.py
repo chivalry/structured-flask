@@ -7,7 +7,7 @@ from . import test_constants as tconst
 @pytest.fixture(scope='module')
 def app():
     app = create_app()
-    app.config.from_object('app.TestConfig')
+    app.config.from_object('app.config.TestConfig')
     context = app.app_context()
     context.push()
     yield app
