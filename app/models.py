@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import current_app
 from flask_login import UserMixin
+from faker import Faker
 
 from . import db, bcrypt
 
@@ -39,6 +40,9 @@ class User(UserMixin, AbstractModel):
         if commit:
             self.add_and_commit()
 
+    def __repr__(self):
+        return '<User {}>'.format(self.email)
+
     def check_password(self, password):
         return bcrypt.check_password_hash(self._hash, password)
 
@@ -55,10 +59,24 @@ class User(UserMixin, AbstractModel):
         if commit:
             self.add_and_commit()
 
-    def __repr__(self):
-        return '<User {}>'.format(self.email)
-
     @classmethod
     def select_by_email(cls, email):
         """Return the unique user identified by the email address."""
         return cls.query.filter_by(email=email)
+
+    @classmethod
+    def create_fake_users(cls, count=100):
+        """Create the number of fake users given by count.
+
+        Returns a list of the created users for possible echoing to a cli function.
+        """
+        users = []
+        fake = Faker()
+        for _ in range(count):
+            email = fake.email()
+            password = fake.password()
+            users.append((email, password))
+            user = cls(email=email, password=password, commit=False)
+            db.session.add(user)
+        db.session.commit()
+        return users

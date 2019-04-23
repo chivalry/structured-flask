@@ -79,22 +79,6 @@ def create_app(config=None):
         except IntegrityError:
             print('Error: Duplicate email address')
 
-    def __create_fake_users(count=100):
-        """Create the number of dummy users given by count.
-
-        Returns a list of the created users for possible echoing to the user.
-        """
-        users = []
-        fake = Faker()
-        for _ in range(count):
-            email = fake.email()
-            password = fake.password()
-            users.append((email, password))
-            user = User(email=email, password=password, commit=False)
-            db.session.add(user)
-        db.session.commit()
-        return users
-
     @app.cli.command()
     @click.option('-e', '--email', prompt='Email', help="The user's email address.")
     @click.option('-p', '--password', prompt='Password', help="The user's password.")
@@ -109,7 +93,7 @@ def create_app(config=None):
                   help='If passed, suppressed record output')
     def create_fake_users(count, no_echo):
         """Create the indicated number of fake users and output their emails and passwords."""
-        users = __create_fake_users(count=count)
+        users = User.create_fake_users(count=count)
         if not no_echo:
             for user in users:
                 print('{}: {}'.format(user[0], user[1]))
@@ -117,7 +101,7 @@ def create_app(config=None):
     @app.cli.command()
     def create_fake_data():
         """Create dummy records in the database."""
-        __create_fake_users()
+        User.create_fake_users()
 
     return app
 
