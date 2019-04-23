@@ -23,7 +23,7 @@ mail = Mail()
 babel = Babel()
 
 
-def create_app():
+def create_app(config=None):
     """Return a configured instance of Flask."""
 
     app = Flask(
@@ -32,8 +32,8 @@ def create_app():
             static_folder='./static'
     )
 
-    app_settings = os.getenv('APP_SETTINGS', 'app.ProdConfig')
-    app.config.from_object(app_settings)
+    config = config or os.getenv('APP_SETTINGS', 'app.ProdConfig')
+    app.config.from_object(config)
 
     register_extensions(app)
     register_blueprints(app)
