@@ -11,6 +11,7 @@ from flask_babel import Babel
 import click
 from faker import Faker
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import HTTPException
 
 from . import constants as const
 
@@ -48,21 +49,10 @@ def create_app(config=None):
     def load_user(user_id):
         return User.query.filter(User.id == int(user_id)).first()
 
-    @app.errorhandler(401)
-    def unauthorized_page(error):
-        return render_template('errors/401.html'), 401
-
-    @app.errorhandler(403)
-    def forbidden_page(error):
-        return render_template('errors/403.html'), 403
-
-    @app.errorhandler(404)
-    def page_not_found(error):
-        return render_template('errors/404.html'), 404
-
-    @app.errorhandler(500)
-    def server_error_page(error):
-        return render_template('errors/500.html'), 500
+    @app.errorhandler(HTTPException)
+    def error_handler(error):
+        code = error.code
+        return render_template('errors.html', error=error), code
 
     @app.shell_context_processor
     def shell_context_processor():
@@ -72,19 +62,15 @@ def create_app(config=None):
                 'User': User,
         }
 
-    def __create_user(email, password):
-        """Create the user record with the given information."""
-        try:
-             User(email=email, password=password)
-        except IntegrityError:
-            print('Error: Duplicate email address')
-
     @app.cli.command()
     @click.option('-e', '--email', prompt='Email', help="The user's email address.")
     @click.option('-p', '--password', prompt='Password', help="The user's password.")
     def create_user(email, password):
         """Offer a CLI interface into creating a user."""
-        __create_user(email=email, password=password)
+        try:
+             User(email=email, password=password)
+        except IntegrityError:
+            print('Error: Duplicate email address')
 
     @app.cli.command()
     @click.option('-c', '--count', default=100,
