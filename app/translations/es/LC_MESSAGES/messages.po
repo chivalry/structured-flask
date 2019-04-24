@@ -1,0 +1,108 @@
+# Spanish translations for PROJECT.
+# Copyright (C) 2019 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2019-04-23 19:18-0700\n"
+"PO-Revision-Date: 2019-04-23 19:18-0700\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es\n"
+"Language-Team: es <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: app/constants.py:5
+msgid "You are logged in. Welcome!"
+msgstr ""
+
+#: app/constants.py:6
+msgid "Invalid email or password."
+msgstr ""
+
+#: app/constants.py:7
+msgid "Please log in to access this page."
+msgstr ""
+
+#: app/constants.py:8
+msgid "You were logged out. Bye!"
+msgstr ""
+
+#: app/constants.py:10
+msgid "Password reset requested"
+msgstr ""
+
+#: app/constants.py:11
+msgid "Please check your email."
+msgstr ""
+
+#: app/constants.py:12
+msgid "Your password has been saved."
+msgstr ""
+
+#: app/constants.py:14 app/user/forms.py:19
+msgid "Email Address"
+msgstr ""
+
+#: app/constants.py:15 app/user/forms.py:14 app/user/forms.py:20
+msgid "Password"
+msgstr ""
+
+#: app/constants.py:16 app/user/forms.py:15
+msgid "Confirm Password"
+msgstr ""
+
+#: app/templates/base.html:51
+msgid "Error"
+msgstr ""
+
+#: app/templates/errors.html:9
+msgid "Go"
+msgstr ""
+
+#: app/templates/errors.html:9
+msgid "home"
+msgstr ""
+
+#: app/templates/header.html:14
+msgid "Home"
+msgstr ""
+
+#: app/templates/header.html:17
+msgid "About"
+msgstr ""
+
+#: app/templates/header.html:24
+msgid "Logout"
+msgstr ""
+
+#: app/templates/header.html:26 app/templates/user/login.html:6
+msgid "Login"
+msgstr ""
+
+#: app/templates/email/recover.html:4
+msgid "Reset Password"
+msgstr ""
+
+#: app/templates/user/login.html:21
+msgid "Log In"
+msgstr ""
+
+#: app/templates/user/login.html:22
+msgid "Forgot Password"
+msgstr ""
+
+#: app/templates/user/password.html:6
+msgid "Set Password"
+msgstr ""
+
+#: app/templates/user/password.html:21
+msgid "Save"
+msgstr ""
+

@@ -31,13 +31,13 @@ def test_logout_behaves_correctly(client):
     with client:
         log_in(client)
         response = client.get('/logout', follow_redirects=True)
-        assert const.LOGOUT_SUCCESS_MSG in str(response.data)
+        assert str(const.LOGOUT_SUCCESS_MSG) in str(response.data)
         assert not current_user.is_active
 
 
 def test_logout_route_requires_login(app, client):
     response = client.get('/logout', follow_redirects=True)
-    assert app.login_manager.login_message in str(response.data)
+    assert str(app.login_manager.login_message) in str(response.data)
 
 
 def test_validate_success_login_form():
@@ -72,7 +72,7 @@ def test_check_password(database):
 def test_failed_login(client):
     with client:
         response = log_in(client, password='foobar')
-        assert const.LOGIN_FAILURE_MSG in str(response.data)
+        assert str(const.LOGIN_FAILURE_MSG) in str(response.data)
 
 
 def test_login_page_has_success_code(client):
@@ -98,7 +98,7 @@ def test_reset_email(client):
         response = client.post('/reset', data=dict(email=tconst.ADMIN_EMAIL),
                                follow_redirects=True)
         msg = outbox[-1]
-        assert const.RESET_PASSWORD_REQUEST_FLASH in str(response.data)
+        assert str(const.RESET_PASSWORD_REQUEST_FLASH) in str(response.data)
         assert msg.subject == const.RESET_EMAIL_SUBJECT
         assert 'Reset Password' in msg.html
         assert 'Reset Password' in msg.body

@@ -3,7 +3,7 @@
 {% block content %}
 
     <header class="content-header">
-        <h1>Login</h1>
+        <h1>{{ _('Login') }}</h1>
         <hr><br>
     </header>
 
@@ -18,8 +18,8 @@
             {{ wtf.form_field(form.email) }}
             {{ wtf.form_field(form.password) }}
 
-            <button class="btn btn-success" type="submit">Log In</button>
-            <p><a href="{{ url_for('user.reset') }}">Forgot Password</a></p>
+            <button class="btn btn-success" type="submit">{{ _('Log In') }}</button>
+            <p><a href="{{ url_for('user.reset') }}">{{ _('Forgot Password') }}</a></p>
         </div>
     </form>
 

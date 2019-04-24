@@ -1,1 +1,1 @@
-Reset Password: {{ url }}
+{{ _('Reset Password') }}: {{ url }}

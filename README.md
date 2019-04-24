@@ -30,6 +30,7 @@ Included Libraries
 - [Flask-Bootstrap](https://pythonhosted.org/Flask-Bootstrap/)
 - [Flask-Bcrypt](https://flask-bcrypt.readthedocs.io/en/latest/)
 - [Flask-Dotenv](https://github.com/grauwoelfchen/flask-dotenv/)
+- [Flask-Babel](https://pythonhosted.org/Flask-Babel/)
 - [python-dotenv](https://github.com/theskumar/python-dotenv)
 - [pytest](https://pytest.org)
 - [Flask-DebugToolbar](https://flask-debugtoolbar.readthedocs.io/en/latest/)
