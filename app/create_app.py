@@ -95,8 +95,8 @@ def register_extensions(app):
     """Conditionally register the extensions."""
     try:
         from flask_debugtoolbar import DebugToolbarExtension
-        toolbar = DebugToolbarExtension(app)
-    except NameError:
+        DebugToolbarExtension(app)
+    except ModuleNotFoundError:
         pass
     bootstrap.init_app(app)
     db.init_app(app)
