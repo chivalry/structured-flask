@@ -128,4 +128,3 @@ def get_locale():
     except IndexError:
         return 'en'
     return language
-

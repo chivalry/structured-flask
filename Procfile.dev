@@ -1,1 +1,1 @@
-web: gunicorn manage:app --reload
+web: gunicorn app:"create_app()" --reload
