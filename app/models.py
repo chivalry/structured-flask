@@ -14,14 +14,17 @@ class AbstractModel(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
+        """Return a default __repr__ for all subclasses."""
         return '<{}: "{}">'.format(self.__class__.__name__, self.id)
 
     def add_and_commit(self):
+        """Add the record to the session and commit it to the database."""
         db.session.add(self)
         db.session.commit()
 
     @classmethod
     def count(cls):
+        """Return the number of records of this class in the database."""
         return db.session.query(cls.id).count()
 
 
@@ -34,6 +37,10 @@ class User(UserMixin, AbstractModel):
     admin = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self, email, password, admin=False, commit=True):
+        """Initialize the user with data.
+
+        :param commit: If True, commits the record to the database, defaults to True
+        """
         self.email = email
         self.password = password
         self.admin = admin
@@ -41,9 +48,11 @@ class User(UserMixin, AbstractModel):
             self.add_and_commit()
 
     def __repr__(self):
+        """Override the super class's __repr__ to show the user's email address."""
         return '<User {}>'.format(self.email)
 
     def check_password(self, password):
+        """Return True if the given password matches the stored hash."""
         return bcrypt.check_password_hash(self._hash, password)
 
     @property
@@ -53,6 +62,10 @@ class User(UserMixin, AbstractModel):
 
     @password.setter
     def password(self, password, commit=True):
+        """Hash the given password and store it in the database.
+
+        :param commit: If True, commits the record to the database, defaults to True
+        """
         self._hash = bcrypt.generate_password_hash(
                 password, current_app.config['BCRYPT_LOG_ROUNDS']
         ).decode('utf-8')
