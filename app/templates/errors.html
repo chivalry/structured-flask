@@ -4,9 +4,10 @@
 
 <div class="jumbotron">
     <div class="text-center">
-        <h1>{{ error.code }}</h1>
-        <p>{{ error.description }}</p>
+        <h1>{{ err.code }}</h1>
+        <p>{{ err.description }}</p>
         <p>Go <a href="{{ url_for('main.home') }}">home</a>.</p>
     </div>
 </div>
+
 {% endblock %}

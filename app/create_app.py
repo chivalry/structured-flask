@@ -50,9 +50,9 @@ def create_app(config=None):
         return User.query.filter(User.id == int(user_id)).first()
 
     @app.errorhandler(HTTPException)
-    def error_handler(error):
-        code = error.code
-        return render_template('errors.html', error=error), code
+    def error_handler(err):
+        code = err.code
+        return render_template('errors.html', err=err), code
 
     @app.shell_context_processor
     def shell_context_processor():
