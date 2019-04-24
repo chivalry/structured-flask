@@ -31,10 +31,10 @@ Included Libraries
 - [Flask-Bcrypt](https://flask-bcrypt.readthedocs.io/en/latest/)
 - [Flask-Dotenv](https://github.com/grauwoelfchen/flask-dotenv/)
 - [Flask-Babel](https://pythonhosted.org/Flask-Babel/)
+- [python-dotenv](https://github.com/theskumar/python-dotenv)
 
 ### Development libraries
 
-- [python-dotenv](https://github.com/theskumar/python-dotenv)
 - [pytest](https://pytest.org)
 - [Flask-DebugToolbar](https://flask-debugtoolbar.readthedocs.io/en/latest/)
 - [flake8](http://flake8.pycqa.org/en/latest/)
