@@ -19,7 +19,7 @@ def app():
 @pytest.fixture(scope='module')
 def database(app):
     db.create_all()
-    user = User(email=tconst.ADMIN_EMAIL, password=tconst.ADMIN_PASSWORD)
+    User(email=tconst.ADMIN_EMAIL, password=tconst.ADMIN_PASSWORD)
     yield db
     db.drop_all()
 
@@ -48,8 +48,10 @@ def runner(app):
 def captured_templates(app):
     """Use signals to capture the templates rendered for a route."""
     recorded = []
+
     def record(sender, template, context, **extra):
         recorded.append((template, context))
+
     template_rendered.connect(record, app)
     try:
         yield recorded
@@ -60,5 +62,5 @@ def captured_templates(app):
 def template_used(app, client, route):
     """Return True if the named template was the only one rendered by the route."""
     with captured_templates(app) as templates:
-        response = client.get(route, follow_redirects=True)
+        client.get(route, follow_redirects=True)
         return len(templates), templates[0][0].name

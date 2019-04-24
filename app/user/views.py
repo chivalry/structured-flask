@@ -6,7 +6,7 @@ from itsdangerous import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature
 
 from . import LoginForm, ResetPasswordForm, PasswordForm
-from .. import mail, User, db
+from .. import mail, User
 from .. import constants as const
 
 user_blueprint = Blueprint('user', __name__)

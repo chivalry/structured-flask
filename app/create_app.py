@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, current_app, template_rendered
+from flask import Flask, render_template, request, current_app
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -9,7 +9,6 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_babel import Babel
 import click
-from faker import Faker
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import HTTPException
 
@@ -68,7 +67,7 @@ def create_app(config=None):
     def create_user(email, password):
         """Offer a CLI interface into creating a user."""
         try:
-             User(email=email, password=password)
+            User(email=email, password=password)
         except IntegrityError:
             print('Error: Duplicate email address')
 

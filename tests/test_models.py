@@ -12,4 +12,4 @@ def test_incorrect_parameters(database):
 
 def test_duplicate_emails_prohibited(database):
     with pytest.raises(IntegrityError):
-        user = User(email=tconst.ADMIN_EMAIL, password=tconst.ADMIN_PASSWORD)
+        User(email=tconst.ADMIN_EMAIL, password=tconst.ADMIN_PASSWORD)

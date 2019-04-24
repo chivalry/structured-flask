@@ -32,13 +32,13 @@ Included Libraries
 - [Flask-Dotenv](https://github.com/grauwoelfchen/flask-dotenv/)
 - [Flask-Babel](https://pythonhosted.org/Flask-Babel/)
 - [python-dotenv](https://github.com/theskumar/python-dotenv)
+- [faker](https://faker.readthedocs.io/en/master/)
 
 ### Development libraries
 
 - [pytest](https://pytest.org)
 - [Flask-DebugToolbar](https://flask-debugtoolbar.readthedocs.io/en/latest/)
 - [flake8](http://flake8.pycqa.org/en/latest/)
-- [faker](https://faker.readthedocs.io/en/master/)
 
 Inspirations
 ------------

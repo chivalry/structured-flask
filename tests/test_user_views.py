@@ -92,7 +92,7 @@ def test_reset_route_code(client):
 
 @pytest.mark.usefixtures('database')
 def test_reset_email(client):
-    assert current_app.config['TESTING'] == True
+    assert current_app.config['TESTING'] is True
     current_app.config['MAIL_SUPPRESS_SEND'] = True
     with mail.record_messages() as outbox:
         response = client.post('/reset', data=dict(email=tconst.ADMIN_EMAIL),
@@ -114,8 +114,8 @@ def test_reset_email(client):
 @pytest.mark.usefixtures('database')
 def test_silent_reset_failures(client):
     with mail.record_messages() as outbox:
-        response = client.post('/reset', data=dict(email='no_address@no-domain.com'),
-                               follow_redirects=True)
+        client.post('/reset', data=dict(email='no_address@no-domain.com'),
+                    follow_redirects=True)
         assert len(outbox) == 0
 
 

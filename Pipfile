@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 flask-debugtoolbar = "*"
 flake8 = "*"
-faker = "*"
 pytest = "*"
 
 [packages]
@@ -23,6 +22,7 @@ pytest = "*"
 python-dotenv = "*"
 flask-mail = "*"
 flask-babel = "*"
+faker = "*"
 
 [requires]
 python_version = "3.7"
