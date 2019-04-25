@@ -27,6 +27,10 @@ class AbstractModel(db.Model):
         """Return the number of records of this class in the database."""
         return db.session.query(cls.id).count()
 
+    @classmethod
+    def select_by_id(cls, id):
+        return cls.query.filter_by(id=id).first()
+
 
 class User(UserMixin, AbstractModel):
     """A simple user model that will support logging into the app."""
