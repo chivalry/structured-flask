@@ -13,14 +13,18 @@ class AbstractModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
+    def __init__(self, commit=True):
+        self.commit = commit
+
     def __repr__(self):
         """Return a default __repr__ for all subclasses."""
         return '<{}: "{}">'.format(self.__class__.__name__, self.id)
 
     def add_and_commit(self):
         """Add the record to the session and commit it to the database."""
-        db.session.add(self)
-        db.session.commit()
+        if self.commit:
+            db.session.add(self)
+            db.session.commit()
 
     @classmethod
     def count(cls):
@@ -45,15 +49,15 @@ class User(UserMixin, AbstractModel):
 
         :param commit: If True, commits the record to the database, defaults to True
         """
+        super().__init__(commit=commit)
         self.email = email
         self.password = password
         self.admin = admin
-        if commit:
-            self.add_and_commit()
+        self.add_and_commit()
 
     def __repr__(self):
         """Override the super class's __repr__ to show the user's email address."""
-        return '<User {}>'.format(self.email)
+        return '<User: "{}">'.format(self.email)
 
     def check_password(self, password):
         """Return True if the given password matches the stored hash."""
@@ -70,16 +74,16 @@ class User(UserMixin, AbstractModel):
 
         :param commit: If True, commits the record to the database, defaults to True
         """
+        self.commit = commit
         self._hash = bcrypt.generate_password_hash(
                 password, current_app.config['BCRYPT_LOG_ROUNDS']
         ).decode('utf-8')
-        if commit:
-            self.add_and_commit()
+        self.add_and_commit()
 
     @classmethod
     def select_by_email(cls, email):
         """Return the unique user identified by the email address."""
-        return cls.query.filter_by(email=email)
+        return cls.query.filter_by(email=email).first()
 
     @classmethod
     def create_fake_users(cls, count=100):

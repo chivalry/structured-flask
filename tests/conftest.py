@@ -2,6 +2,7 @@ import pytest
 from contextlib import contextmanager
 
 from flask import template_rendered
+from faker import Faker
 
 from app import create_app, db, User
 from . import test_constants as tconst
@@ -42,6 +43,11 @@ def blank_app():
 @pytest.fixture(scope='function')
 def runner(app):
     yield app.test_cli_runner()
+
+
+@pytest.fixture(scope='function')
+def fake():
+    return Faker()
 
 
 @contextmanager
