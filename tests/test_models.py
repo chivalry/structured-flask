@@ -8,7 +8,7 @@ from . import test_constants as tconst
 def test_user_repr(database, fake):
     email = fake.email()
     user = User(email=email, password=fake.password())
-    assert user.__repr__() == '<User: "{}">'.format(email)
+    assert user.__repr__() == f'<User: "{email}">'
 
 
 def test_user_select_by_id(database):
@@ -27,7 +27,7 @@ def test_user_duplicate_emails_prohibited(database):
 
 
 def test_user_incorrect_parameters(database):
-    with pytest.raises(TypeError):
+    with pytest.raises(IntegrityError):
         User()
 
 

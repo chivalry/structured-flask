@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import current_app
 from flask_login import UserMixin
 from faker import Faker
+from sqlalchemy.exc import IntegrityError
 
 from . import db, bcrypt
 
@@ -13,18 +14,24 @@ class AbstractModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    def __init__(self, commit=True):
-        self.commit = commit
+    def __init__(self, **kwargs):
+        self.commit = kwargs.pop('commit', True)
+        super().__init__(**kwargs)
+        self.add_and_commit()
 
     def __repr__(self):
         """Return a default __repr__ for all subclasses."""
-        return '<{}: "{}">'.format(self.__class__.__name__, self.id)
+        return f'<{self.__class__.__name__}: "{self.id}">'
 
     def add_and_commit(self):
         """Add the record to the session and commit it to the database."""
         if self.commit:
             db.session.add(self)
-            db.session.commit()
+            try:
+                db.session.commit()
+            except IntegrityError as error:
+                db.session.rollback()
+                raise error
 
     @classmethod
     def count(cls):
@@ -44,20 +51,9 @@ class User(UserMixin, AbstractModel):
     _hash = db.Column(db.String(255), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
 
-    def __init__(self, email, password, admin=False, commit=True):
-        """Initialize the user with data.
-
-        :param commit: If True, commits the record to the database, defaults to True
-        """
-        super().__init__(commit=commit)
-        self.email = email
-        self.password = password
-        self.admin = admin
-        self.add_and_commit()
-
     def __repr__(self):
         """Override the super class's __repr__ to show the user's email address."""
-        return '<User: "{}">'.format(self.email)
+        return f'<User: "{self.email}">'
 
     def check_password(self, password):
         """Return True if the given password matches the stored hash."""
