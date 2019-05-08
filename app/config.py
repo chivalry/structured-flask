@@ -32,7 +32,8 @@ class DevConfig(Config):
 
     DEBUG_TB_ENABLED = True
     DEBUG_TB_INTERCEPT_REDIRECTS = False
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(os.path.join(basedir, 'dev.db'))
+    db_path = os.path.join(basedir, 'dev.db')
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{db_path}'
 
 
 class TestConfig(Config):

@@ -81,7 +81,7 @@ def create_app(config=None):
         users = User.create_fake_users(count=count)
         if not no_echo:
             for user in users:
-                print('{}: {}'.format(user[0], user[1]))
+                print(f'{user[0]}: {user[1]}')
 
     @app.cli.command()
     def create_fake_data():
